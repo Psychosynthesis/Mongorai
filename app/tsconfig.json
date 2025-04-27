@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "outDir": "./dist/out-tsc",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "importHelpers": true,
+    "declaration": false,
+    "sourceMap": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+        "@/*": ["src/*"],
+        "@Toolz": ["src/app/tools/"],
+        "@Toolz/*": ["src/app/tools/*"],
+        "@Components": ["src/app/components/"],
+        "@Components/*": ["src/app/components/*"],
+        "@Pages": ["src/app/pages/"],
+        "@Pages/*": ["src/app/pages/*"]
+    }
+  },
+  "include": ["src", "vite.config.ts"],
+  "exclude": [ "node_modules" ]
+}

@@ -1,0 +1,34 @@
+.databases-component {
+	padding: 20px;
+	width: 100%;
+	margin: 0 auto;
+
+	h2 {
+		margin-bottom: 20px;
+	}
+
+	table {
+		color: var(--text);
+		width: 100%;
+		border-collapse: collapse;
+		marginBottom: 20px;
+
+		thead {
+			background-color: var(--color-3);
+
+			tr { border-bottom: 2px solid #e0e0e0; }
+			th { padding: 12px 8px; text-align: left; font-weight: 500; }
+		}
+
+		tbody {
+			td {
+				padding: 10px 20px;
+
+				&.noDataCell {
+					padding: 20px;
+					text-align: center;
+				}
+			}
+		}
+	}
+}

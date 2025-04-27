@@ -1,0 +1,100 @@
+@import '@Commn/colors';
+@import '@Commn/sizes';
+
+.custom-select {
+	position: relative;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	border: none;
+	box-sizing: border-box;
+	border-radius: 6px;
+	padding: calc($max-gap - $min-gap) $base-gap $min-gap $base-gap;
+	min-height: $max-gap;
+	width: 100%;
+
+	.select-front-box {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 100%;
+		line-height: 24px;
+
+		.placeholder-caption {
+			font-size: 10px;
+			line-height: 14px;
+			font-weight: 400;
+			opacity: 0.5;
+			position: absolute;
+			top: auto;
+			transition: top 400ms;
+			user-select: none;
+
+			&.shifted-caption {
+				top: $min-gap;
+				transition: top 400ms;
+			}
+		}
+
+		.current-caption {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			user-select: none;
+		}
+	}
+
+	.options-list {
+		opacity: 0;
+		height: 0px;
+		transition: opacity 300ms;
+	}
+
+	.rotating-tick {
+		font-size: 140%;
+		display: inline-flex;
+		transition: transform 400ms;
+		user-select: none;
+		margin-left: $min-gap;
+	}
+
+	&.unfolded {
+		.rotating-tick {
+			transform: rotate(90deg);
+			display: inline-flex;
+			transition: transform 400ms;
+		}
+	}
+}
+
+.custom-select-overlay {
+	.options-list {
+		height: auto;
+		max-height: 300px;
+		text-align: left;
+		font-size: 16px;
+		display: block;
+		border: none;
+		box-shadow: 0px 4px 16px rgba(138, 155, 183, 0.23);
+		border-radius: 6px;
+		position: absolute;
+		background: #fff;
+		width: max-content;
+		overflow-y: scroll;
+		z-index: $zIndexTop;
+		opacity: 1;
+
+		>div {
+			border-left: 3px solid transparent;
+			padding: $base-gap $max-gap;
+			cursor: pointer;
+			user-select: none;
+
+			&:hover,
+			&.current-option {
+				font-family: "Roboto Bold";
+				border-left: 3px solid $defaultThemeAccent;
+			}
+		}
+	}
+}
