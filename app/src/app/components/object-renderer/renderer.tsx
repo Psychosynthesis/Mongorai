@@ -6,6 +6,8 @@ export interface ObjectRendererProps {
   header?: ReactNode;
   dataToRender: any;
   onEdit?: (editData: { updated_src: any }) => void;
+  autoCollapse?: boolean;
+  onSelect: (id: any) => void;
 }
 
 const getValueByPath = (obj: any, path: string) => {
@@ -28,6 +30,7 @@ const RenderField = ({ value, path, onEdit }: {
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(JSON.stringify(value));
+  const isEditAvailable = typeof onEdit === 'function';
 
   const handleSave = () => {
     try {
@@ -35,24 +38,20 @@ const RenderField = ({ value, path, onEdit }: {
       onEdit?.(path, parsedValue);
       setIsEditing(false);
     } catch (e) {
-      console.error('Invalid JSON');
+      console.error('Error on saving. Invalid JSON?');
     }
   };
 
   return isEditing ? (
     <div className="edit-field">
-      <input
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        autoFocus
-      />
-      <button onClick={handleSave}>✓</button>
-      <button onClick={() => setIsEditing(false)}>✕</button>
+      <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} autoFocus />
+      <button className="button-ok" onClick={handleSave}>✓</button>
+      <button className="button-esc" onClick={() => setIsEditing(false)}>✕</button>
     </div>
   ) : (
     <span
-      className="editable-value"
-      onClick={() => onEdit && setIsEditing(true)}
+      className={isEditAvailable? "editable-value" : "value-text" }
+      onClick={() => isEditAvailable && setIsEditing(true)}
     >
       {JSON.stringify(value)}
     </span>
@@ -66,16 +65,16 @@ const renderObject = (
   pathPrefix: string = ''
 ): ReactNode => {
   const itemType = typeof obj;
+  const cellClass = onEdit ? 'value-cell-editable' : 'value-cell';
 
   if (itemType === 'object' && obj !== null && !Array.isArray(obj)) {
     return Object.keys(obj).map((key) => {
       const currentPath = pathPrefix ? `${pathPrefix}.${key}` : key;
+      const paddingLeft = layer === 0 ? '10px' : `${layer * 20}px`
+      const rowClass = typeof obj[key] === 'object' ? 'object-row has-nested-object' : 'object-row';
       return (
-        <div
-          key={currentPath}
-          style={{ paddingLeft: `${layer * 20}px`, marginTop: '4px' }}
-        >
-          <strong>{key}:</strong>
+        <div className={rowClass} key={currentPath} style={{ paddingLeft }}>
+          <div className="key-cell">{key}:</div>
           {renderObject(obj[key], onEdit, layer + 1, currentPath)}
         </div>
       );
@@ -83,12 +82,8 @@ const renderObject = (
   }
 
   return (
-    <div style={{ display: 'inline-block', marginLeft: '8px' }}>
-      <RenderField
-        value={obj}
-        path={pathPrefix}
-        onEdit={onEdit}
-      />
+    <div className={cellClass}>
+      <RenderField value={obj} path={pathPrefix} onEdit={onEdit} />
       <span className="type-label"> ({itemType})</span>
     </div>
   );
@@ -104,7 +99,7 @@ export const ObjectRenderer = ({ dataToRender, header, onEdit }: ObjectRendererP
   return (
     <div className="object-renderer">
       <h3>{header}</h3>
-      {renderObject(dataToRender, handleFieldEdit)}
+      {renderObject(dataToRender, onEdit && handleFieldEdit)}
     </div>
   );
 };

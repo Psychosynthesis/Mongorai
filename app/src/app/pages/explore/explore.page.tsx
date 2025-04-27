@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
 
-import { MongoDbService } from '../../services/mongo-db.service';
-import SearchBox from '../../components/search-box/searchbox';
-import ReactJson from '../../components/pretty-json/prettyjson';
 import { useNotifications } from '../../NotificationsContext';
+import { MongoDbService } from '../../services/mongo-db.service';
 import { JsonParser } from '../../services/json-parser.service';
+
+import { SearchBox, ObjectRenderer } from '../../components/';
 
 import type { SearchParams } from '../../components/search-box/searchbox';
 
@@ -37,8 +37,12 @@ const ExplorePage: React.FC = () => {
   });
 
   const [loading, setLoading] = useState({ content: true, count: true });
-  const [count, setCount] = useState({ total: 0, start: 0 });
+  const [displayCount, setCount] = useState({ total: 0, start: 0 }); // Для пагинации
   const [items, setItems] = useState<any[]>([]);
+
+  // Для пагинации
+  const hasPrevious = params.skip > 0;
+  const hasNext = params.skip + params.limit < displayCount.total;
 
   useEffect(() => {
     const checkReadOnly = async () => {
@@ -53,6 +57,9 @@ const ExplorePage: React.FC = () => {
 
     loadData();
   }, [server, database, collection]);
+
+  // Вспомогательные функции для пагинации
+
 
   const update = async (updateUrl = true) => {
     try {
@@ -73,7 +80,7 @@ const ExplorePage: React.FC = () => {
 
       setLoading({ content: true, count: true });
       setItems([]);
-      setCount(prev => ({ ...prev, total: 0 }));
+      // setCount(prev => ({ ...prev, total: 0 }));
 
       // Загрузка документов
       const queryResult = await queryCollection(
@@ -109,6 +116,24 @@ const ExplorePage: React.FC = () => {
       notify(error instanceof Error ? error.message : 'Failed to load data', 'error');
       setLoading({ content: false, count: false });
     }
+  };
+
+  const next = () => {
+    const newSkip = params.skip + params.limit;
+    setParams(prev => ({ ...prev, skip: newSkip }));
+    update();
+  };
+
+  const previous = () => {
+    const newSkip = Math.max(0, params.skip - params.limit);
+    setParams(prev => ({ ...prev, skip: newSkip }));
+    update();
+  };
+
+  const goToLast = () => {
+    const newSkip = Math.max(0, displayCount.total - params.limit);
+    setParams(prev => ({ ...prev, skip: newSkip }));
+    update();
   };
 
   const handleSearchChange = (newParams: Partial<typeof params>) => {
@@ -152,31 +177,28 @@ const ExplorePage: React.FC = () => {
   };
 
   const paginationControls = (
-    <div className="d-flex justify-content-between align-items-center my-3">
+    <div className="pagination-controls">
       <div className="summary">
-        {count.total > 0 && (
-          <span>
-            {count.start + 1} - {count.start + items.length} of {count.total}
-          </span>
+        {loading.count && <>...</>}
+        {!loading.count && (
+          <>
+            <span>
+              {displayCount.start + 1} - {displayCount.start + items.length} of {displayCount.total}
+            </span>
+            <span> Documents</span>
+          </>
         )}
-        <span> Documents</span>
       </div>
 
       <div className="actions">
-        <Button
-          variant="outline-secondary"
-          onClick={previous}
-          disabled={!hasPrevious}
-          className="me-2"
-        >
+        <Button variant="outline-secondary" onClick={previous} disabled={!hasPrevious}>
           Previous
         </Button>
-        <Button
-          variant="outline-secondary"
-          onClick={next}
-          disabled={!hasNext}
-        >
+        <Button variant="outline-secondary" onClick={next} disabled={!hasNext}>
           Next
+        </Button>
+        <Button  variant="outline-secondary"  onClick={goToLast} disabled={params.skip + params.limit >= displayCount.total || displayCount.total === 0}>
+          Last Page
         </Button>
       </div>
     </div>
@@ -186,45 +208,29 @@ const ExplorePage: React.FC = () => {
     <div className="explore-component">
       <SearchBox params={params} onChange={handleSearchChange} onSearch={update} />
 
-      {!loading.count && paginationControls}
+      {paginationControls}
 
       {loading.content ? (
-        <div className="text-center my-5">
+        <div className="text-center">
           <Spinner animation="border" />
         </div>
       ) : (
         items.map((item, index) => (
-          <div key={index} className="my-3">
-            <ReactJson
-              json={item}
+          <div key={index} className="collection-item">
+            <div className="item-control-row">
+              <Button className="remove-button" onClick={() => handleRemove(item._id?.$value)}>Remove item</Button>
+            </div>
+            <ObjectRenderer
+              dataToRender={item}
               autoCollapse={true}
               onEdit={!readOnly ? e => handleEdit(item._id?.$value, e.updated_src) : undefined}
-              onRemove={!readOnly ? () => handleRemove(item._id?.$value) : undefined}
-              onSelect={e => item._id?.$value && goToDocument(item._id.$value)}
+              onSelect={() => item._id?.$value && goToDocument(item._id.$value)}
             />
           </div>
         ))
       )}
     </div>
   );
-};
-
-// Вспомогательные функции для пагинации
-const hasNext = (count: number, start: number, items: any[], limit: number) =>
-  start + items.length < count;
-
-const next = (params: any, setParams: React.Dispatch<any>, update: () => void) => {
-  const newSkip = params.skip + params.limit;
-  setParams(prev => ({ ...prev, skip: newSkip }));
-  update();
-};
-
-const hasPrevious = (start: number) => start > 0;
-
-const previous = (params: any, setParams: React.Dispatch<any>, update: () => void) => {
-  const newSkip = Math.max(0, params.skip - params.limit);
-  setParams(prev => ({ ...prev, skip: newSkip }));
-  update();
 };
 
 export default ExplorePage;

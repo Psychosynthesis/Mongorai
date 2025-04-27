@@ -15,7 +15,7 @@ interface PrettyJsonProps {
   onSelect?: (id: string) => void;
 }
 
-const PrettyJson: React.FC<PrettyJsonProps> = ({
+export const PrettyJson: React.FC<PrettyJsonProps> = ({
   json,
   readOnly = false,
   autoCollapse = false,
@@ -25,6 +25,10 @@ const PrettyJson: React.FC<PrettyJsonProps> = ({
 }) => {
   const { notify } = useNotifications();
   const [removing, setRemoving] = useState(false);
+
+  const isObject = json?.$type === 'ObjectId';
+
+  console.log('JSON to render: ', json)
 
   const customTheme = {
     ...githubDarkTheme,
@@ -47,22 +51,6 @@ const PrettyJson: React.FC<PrettyJsonProps> = ({
     // Кастомный рендер для специальных типов
     const value = props.value;
 
-    if (value?.$type === 'ObjectId') {
-      return (
-        <span className="object-id">
-          ObjectId("{value.$value}")
-          {onSelect && (
-            <button
-              className="btn-go-id"
-              onClick={() => onSelect(value.$value)}
-            >
-              Edit object
-            </button>
-          )}
-        </span>
-      );
-    }
-
     if (value?.$type === 'RegExp') {
       return <span className="regex-value">/{value.$value.$pattern}/{value.$value.$flags}</span>;
     }
@@ -78,6 +66,19 @@ const PrettyJson: React.FC<PrettyJsonProps> = ({
             Remove Document
           </button>
         )}
+        {isObject &&
+          <span className="object-id">
+            ObjectId("{json.$value}")
+            {onSelect && (
+              <button
+                className="btn-go-id"
+                onClick={() => onSelect(json.$value)}
+              >
+                Edit object
+              </button>
+            )}
+          </span>
+        }
       </div>
 
       <JsonView

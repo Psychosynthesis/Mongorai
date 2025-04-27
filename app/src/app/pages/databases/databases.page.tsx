@@ -49,7 +49,7 @@ const DatabasesPage: React.FC = () => {
           {databases.map((database) => (
             <tr style={{ borderBottom: '1px solid #e0e0e0' }} key={database.name}>
               <td>
-                <Link to={`/servers/${server}/databases/${database.name}/collections`} style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 500 }}>
+                <Link to={`/servers/${server}/databases/${database.name}/collections`} className="database-link">
                   {database.name}
                 </Link>
               </td>

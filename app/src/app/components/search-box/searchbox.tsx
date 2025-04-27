@@ -11,7 +11,7 @@ export type SearchParams = {
   skip: number;
 };
 
-const SearchBox: React.FC<{
+export const SearchBox: React.FC<{
   params: SearchParams;
   onChange: (params: Partial<SearchParams>) => void;
   onSearch: () => void;

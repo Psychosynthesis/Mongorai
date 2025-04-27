@@ -3,37 +3,97 @@
   word-break: break-all;
   white-space: break-spaces;
 
+  .object-row {
+    display: flex;
+    padding: 10px 5px;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 2px;
+    }
+
+    &:nth-child(even) {
+      background: rgba(0,0,50,0.1);
+    }
+
+    &.has-nested-object {
+      margin-top: 5px;
+      display: block;
+
+      >.key-cell {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .key-cell {
+    word-break: keep-all;
+  }
+
+  .value-cell {
+    margin-left: 10px;
+
+    &-editable {
+      width: 100%;
+      margin-left: 10px;
+    }
+  }
+
   .value-text {
     opacity: 0.8;
     display: inline;
     font-style: italic;
   }
 
-  &__header {
-    font-weight: 400;
-  }
-  &__line {
-    padding: 16px 24px;
-  }
-  &__line-title {
-    color: #333;
-  }
-  &__line-value {
-    word-break: break-word;
+  .edit-field {
+    width: 100%;
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    padding: 4px;
+    border: 1px solid rgba(150, 150, 150, 0.5);
+    border-radius: 3px;
+    background: var(--color-4);
+
+    .button {
+      &-ok {
+        color: green;
+      }
+
+      &-esc {
+        color: red;
+      }
+    }
   }
 
-  .edit-field {
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  background: #fff;
-  padding: 2px;
-  border: 1px solid #ccc;
+  .editable-value {
+    color: var(--text-lighter);
+    cursor: pointer;
+    padding: 5px;
+    margin: 5px;
+    margin-left: 0px;
+    border-radius: 3px;
+    background: var(--color-4);
+    font-style: italic;
+
+    &:hover {
+      color: var(--link);
+      background: var(--color-3);
+    }
+  }
+
+  .type-label {
+    color: #666;
+    font-size: var(--text-darker);
+  }
 
   input {
+    color: var(--text);
+    width: 100%;
     border: none;
     outline: none;
     min-width: 120px;
+    background: var(--color-4);
   }
 
   button {
@@ -41,22 +101,4 @@
     border: none;
     cursor: pointer;
   }
-}
-
-.editable-value {
-  color: #222;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 3px;
-  background: #f0f0f0;
-
-  &:hover {
-    background: #e0e0e0;
-  }
-}
-
-.type-label {
-  color: #666;
-  font-size: 0.8em;
-}
 }

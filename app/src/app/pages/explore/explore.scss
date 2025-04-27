@@ -13,15 +13,52 @@
 		justify-content: space-between;
 	}
 
-	.summary {
-		font-size:  1.3em;
-		color: var(--text);
-		margin-top: 5px;
-	}
-
 	.actions {
 		& > .btn {
 			margin-left: 10px;
+		}
+	}
+
+	.pagination-controls {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+
+		.summary {
+			font-size:  120%;
+			color: var(--text-darker);
+			margin-top: 5px;
+		}
+	}
+
+	.collection-item {
+		border-radius: 6px;
+		border-bottom: 1px solid var(--color-4);
+		padding: 20px;
+		margin-bottom: 10px;
+		background: var(--color-2);
+
+		&:nth-child(even) {
+			background: var(--color-3);
+		}
+
+		.item-control-row {
+			display: flex;
+			justify-content: end;
+
+			button {
+				background: none;
+				border: 1px solid rgba(150,150,150, 0.5);
+				border-radius: 5px;
+			}
+
+			.remove-button {
+				border-color: rgba(200, 30, 50, 0.6);
+
+				&:hover {
+					background: rgba(200, 30, 50, 0.6);
+				}
+			}
 		}
 	}
 }
