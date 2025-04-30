@@ -1,8 +1,9 @@
 // src/pages/DocumentPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ObjectRenderer } from '../../components/object-renderer/renderer';
+import { ObjectRenderer } from 'rendrui';
 import { Button, Spinner } from 'react-bootstrap';
+
 import { MongoDbService } from '../../services/mongo-db.service';
 import { useNotifications } from '../../NotificationsContext';
 
@@ -114,6 +115,7 @@ const DocumentPage: React.FC = () => {
       <ObjectRenderer
         dataToRender={item}
         onEdit={!readOnly ? handleEdit : undefined}
+        onSelect={() => {}}
       />
     </div>
   );

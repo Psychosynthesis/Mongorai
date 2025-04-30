@@ -1,16 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, type ReactNode } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
+import { ObjectRenderer } from 'rendrui';
 
 import { useNotifications } from '../../NotificationsContext';
 import { MongoDbService } from '../../services/mongo-db.service';
 import { JsonParser } from '../../services/json-parser.service';
 
-import { SearchBox, ObjectRenderer } from '../../components/';
+import { SearchBox } from '../../components/';
+
+import { RegexEditor } from './RegexEditor';
 
 import type { SearchParams } from '../../components/search-box/searchbox';
 
+
 import './explore.scss';
+
+declare interface CustomRenderer {
+    match: (value: any, path: string) => boolean;
+    render: (props: {
+        value: any;
+        path: string;
+        onEdit?: (path: string, newValue: any) => void;
+    }) => ReactNode;
+}
+
+const regexRenderer: CustomRenderer = {
+  match: (value, path) =>
+    (value && typeof value === 'object' && ('$regex' in value)) ||
+    path?.endsWith('patterns]'), // Условие для массива паттернов
+  render: ({ value, path, onEdit }) => {
+    const pattern = value.$regex || value.source;
+    const options = value.$options || value.flags || '';
+
+    const handleUpdate = (newPattern: string, newOptions: string) => {
+      onEdit?.(path, { $regex: newPattern, $options: newOptions });
+    };
+
+    return <RegexEditor
+      pattern={pattern}
+      options={options}
+      onUpdate={handleUpdate}
+    />;
+  }
+};
 
 const ExplorePage: React.FC = () => {
   const { server, database, collection } = useParams<{
@@ -223,6 +256,7 @@ const ExplorePage: React.FC = () => {
             <ObjectRenderer
               dataToRender={item}
               autoCollapse={true}
+              customRenderers={[regexRenderer]}
               onEdit={!readOnly ? e => handleEdit(item._id?.$value, e.updated_src) : undefined}
               onSelect={() => item._id?.$value && goToDocument(item._id.$value)}
             />

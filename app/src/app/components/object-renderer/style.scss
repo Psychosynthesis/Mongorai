@@ -87,6 +87,11 @@
     font-size: var(--text-darker);
   }
 
+  .array-controls button,
+  .empty-array button {
+    border: 1px solid rgba(150,150,150, 0.6);
+  }
+
   input {
     color: var(--text);
     width: 100%;

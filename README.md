@@ -5,14 +5,14 @@ or anywhere else, for you and your team.
 
 Is blazing fast for all operations, including sort/skip/limit.
 
-Based on the (Huggingface Mongoku)[https://github.com/huggingface/Mongorai] project, but the frontend has been completely rewritten in ReactJS, the build process has been significantly simplified, and the number of dependencies has been reduced.
+Based on the [Huggingface Mongoku](https://github.com/huggingface/Mongoku) project, but the frontend has been completely rewritten in ReactJS, the build process has been significantly simplified, and the number of dependencies has been reduced.
 
 Built on TypeScript/Node.js/React.
 
 
-### Install & Run
+### Install & Run (not worked yet)
 
-This is the easy and recommended way of installing and running Mongorai.
+This is the way Mongoku was installed:
 
 ```
 # Install
@@ -20,6 +20,13 @@ npm install -g mongorai
 
 # Run from your current terminal
 mongorai start
+```
+
+***Now it's not worked for Mongorai. You need to clone this repo and then run next commands: ***
+
+```
+npm i
+npm run server
 ```
 
 You can also run Mongorai as a daemon, using either [PM2](https://github.com/Unitech/pm2) or
@@ -41,8 +48,8 @@ npm install
 
 # Build the front
 cd app
-npm install
-npm build
+npm run install
+npm run build
 
 # And the back
 cd ..
@@ -52,7 +59,7 @@ tsc
 node dist/server.js
 ```
 
-### Configuration
+### Configuration (old config)
 
 You can also specify a few things using environment variables:
 ```

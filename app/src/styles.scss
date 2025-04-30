@@ -1,6 +1,6 @@
 // Themes
-@import 'themes/dark-default';
-@import 'themes/light';
+@use 'themes/dark-default';
+@use 'themes/light';
 
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Cuprum|Rajdhani');
