@@ -2,14 +2,14 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as util from 'util';
-import * as Nedb from 'nedb';
+import Nedb from 'nedb';
 
 export interface Host {
   path: string
 }
 
-const DEFAULT_HOSTS = process.env.MONGOKU_DEFAULT_HOST ? process.env.MONGOKU_DEFAULT_HOST.split(';') : ['localhost:27017'];
-const DATABASE_FILE = process.env.MONGOKU_DATABASE_FILE || path.join(os.homedir(), '.mongoku.db');
+const DEFAULT_HOSTS = process.env.MONGORAI_DEFAULT_HOST ? process.env.MONGORAI_DEFAULT_HOST.split(';') : ['localhost:27017'];
+const DATABASE_FILE = process.env.MONGORAI_DATABASE_FILE || path.join(os.homedir(), '.mongorai.db');
 
 
 export class HostsManager {

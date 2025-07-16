@@ -18,7 +18,7 @@ export interface CollectionJSON {
 
 export class Collection {
   private _collection: MongoDb.Collection;
-  private countTimeout = parseInt(process.env.MONGOKU_COUNT_TIMEOUT!, 10) || 5000;
+  private countTimeout = parseInt(process.env.MONGORAI_COUNT_TIMEOUT!, 10) || 5000;
 
   get name() {
     return this._collection.collectionName;

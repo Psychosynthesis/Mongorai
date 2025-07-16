@@ -13,7 +13,7 @@ api.use(cors());
 api.get('/readonly', async (req, res, next) => {
   return res.json({
     ok: true,
-    readOnly: (process.env.MONGOKU_READ_ONLY_MODE === 'true'),
+    readOnly: (process.env.MONGORAI_READ_ONLY_MODE === 'true'),
   });
 });
 

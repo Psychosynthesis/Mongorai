@@ -1,7 +1,7 @@
 import React, { useState, useEffect, type ReactNode } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
-import { ObjectRenderer } from 'rendrui';
+import { ObjectRenderer, type CustomRenderer } from 'rendrui';
 
 import { useNotifications } from '../../NotificationsContext';
 import { MongoDbService } from '../../services/mongo-db.service';
@@ -13,17 +13,7 @@ import { RegexEditor } from './RegexEditor';
 
 import type { SearchParams } from '../../components/search-box/searchbox';
 
-
 import './explore.scss';
-
-declare interface CustomRenderer {
-    match: (value: any, path: string) => boolean;
-    render: (props: {
-        value: any;
-        path: string;
-        onEdit?: (path: string, newValue: any) => void;
-    }) => ReactNode;
-}
 
 const regexRenderer: CustomRenderer = {
   match: (value, path) =>
@@ -209,39 +199,35 @@ const ExplorePage: React.FC = () => {
     }
   };
 
-  const paginationControls = (
-    <div className="pagination-controls">
-      <div className="summary">
-        {loading.count && <>...</>}
-        {!loading.count && (
-          <>
-            <span>
-              {displayCount.start + 1} - {displayCount.start + items.length} of {displayCount.total}
-            </span>
-            <span> Documents</span>
-          </>
-        )}
-      </div>
-
-      <div className="actions">
-        <Button variant="outline-secondary" onClick={previous} disabled={!hasPrevious}>
-          Previous
-        </Button>
-        <Button variant="outline-secondary" onClick={next} disabled={!hasNext}>
-          Next
-        </Button>
-        <Button  variant="outline-secondary"  onClick={goToLast} disabled={params.skip + params.limit >= displayCount.total || displayCount.total === 0}>
-          Last Page
-        </Button>
-      </div>
-    </div>
-  );
-
   return (
     <div className="explore-component">
       <SearchBox params={params} onChange={handleSearchChange} onSearch={update} />
 
-      {paginationControls}
+      <div className="pagination-controls">
+        <div className="summary">
+          {loading.count && <>...</>}
+          {!loading.count && (
+            <>
+              <span>
+                {displayCount.start + 1} - {displayCount.start + items.length} of {displayCount.total}
+              </span>
+              <span> Documents</span>
+            </>
+          )}
+        </div>
+
+        <div className="actions">
+          <Button variant="outline-secondary" onClick={previous} disabled={!hasPrevious}>
+            Previous
+          </Button>
+          <Button variant="outline-secondary" onClick={next} disabled={!hasNext}>
+            Next
+          </Button>
+          <Button  variant="outline-secondary"  onClick={goToLast} disabled={params.skip + params.limit >= displayCount.total || displayCount.total === 0}>
+            Last Page
+          </Button>
+        </div>
+      </div>
 
       {loading.content ? (
         <div className="text-center">

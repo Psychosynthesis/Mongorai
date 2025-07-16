@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 
-const MONGOKU_READ_ONLY_MODE = process.env.MONGOKU_READ_ONLY_MODE === 'true';
+const MONGORAI_READ_ONLY_MODE = process.env.MONGORAI_READ_ONLY_MODE === 'true';
 
 export function writeEnabled(_: Request, res: Response, next: NextFunction) {
-    if (MONGOKU_READ_ONLY_MODE) {
+    if (MONGORAI_READ_ONLY_MODE) {
         // METHOD not allowed
         res.status(405);
 

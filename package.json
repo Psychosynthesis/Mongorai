@@ -2,7 +2,7 @@
   "name": "mongorai",
   "version": "1.0.0",
   "license": "MIT",
-  "author": "Nick G. <ex-er-sis@ya.ru>",
+  "author": "Nick G.",
   "keywords": [ "MongoDB", "administration", "explore", "query", "gui"],
   "repository": {
     "type": "git",
@@ -10,10 +10,9 @@
   },
   "dependencies": {
     "body-parser": "^1.19.1",
-    "chalk": "^2.4.2",
     "commander": "^8.3.0",
     "cors": "^2.8.5",
-    "express": "^4.17.2",
+    "express": "^5.1.0",
     "figlet": "^1.5.2",
     "mongodb": "^5.9.2",
     "nedb": "^1.8.0"
@@ -26,7 +25,9 @@
   },
   "main": "./dist/server.js",
   "scripts": {
-    "server": "npx tsc & npx nodemon --inspect=9017 ./dist/server.js"
+    "server": "npx tsc & npx nodemon --inspect=9017 ./dist/server.js",
+    "build": "tsc",
+    "prepublish": "npm run build"
   },
   "bin": {
     "mongorai": "./dist/cli.js"
