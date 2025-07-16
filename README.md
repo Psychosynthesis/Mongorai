@@ -1,27 +1,28 @@
 # Mongorai
 
-```
-::::    ::::   ::::::::  ::::    :::  ::::::::   ::::::::  :::::::::      :::     :::::::::::
-+:+:+: :+:+:+ :+:    :+: :+:+:   :+: :+:    :+: :+:    :+: :+:    :+:   :+: :+:       :+:     
-+:+ +:+:+ +:+ +:+    +:+ :+:+:+  +:+ +:+        +:+    +:+ +:+    +:+  +:+   +:+      +:+     
-+#+  +:+  +#+ +#+    +:+ +#+ +:+ +#+ :#:        +#+    +:+ +#++:++#:  +#++:++#++:     +#+     
-+#+       +#+ +#+    +#+ +#+  +#+#+# +#+   +#+# +#+    +#+ +#+    +#+ +#+     +#+     +#+     
-#+#       #+# #+#    #+# #+#   #+#+# #+#    #+# #+#    #+# #+#    #+# #+#     #+#     #+#     
-###       ###  ########  ###    ####  ########   ########  ###    ### ###     ### ###########
+Light MongoDB client for the web. Minimalistic UI used React with minimum dependencies.
 
 ```
 
-MongoDB client for the web. Query your data directly from your browser. You can host it locally,
+• ▌ ▄ ·.        ▐ ▄  ▄▄ •       ▄▄▄   ▄▄▄· ▪  
+·██ ▐██ ▪▪     •█▌▐█▐█ ▀        █  █·▐█ ▀█ ██
+▐█ ▌▐▌▐█· ▄█▀▄ ▐█▐▐▌▄█ ▀█▄ ▄█▀▄ ▐▀▀▄ ▄█▀▀█ ▐█·
+██ ██▌▐█▌▐█▌.▐▌██▐█▌▐█▄▪▐█▐█▌ ▐▌▐█ █▌▐█ ▪▐▌▐█
+▀▀  █ ▀▀▀ ▀█▄▀▪▀▀ █▪·▀▀▀▀  ▀█▄▀▪.▀  ▀ ▀  ▀ ▀▀▀
+
+```
+
+Query your data directly from your browser. You can host it locally,
 or anywhere else, for you and your team.
 
 Is blazing fast for all operations, including sort/skip/limit.
 
-Based on the [Huggingface Mongoku](https://github.com/huggingface/Mongoku) project, but the frontend has been completely rewritten in ReactJS, the build process has been significantly simplified, and the number of dependencies has been reduced.
+Based on the [Huggingface Mongoku](https://github.com/huggingface/Mongoku) project, but the frontend has been completely rewritten in ReactJS, the build process has been significantly simplified, and the number of dependencies has been reduced. Also updated some dependencies to improve security.
 
 Built on TypeScript/Node.js/React.
 
 
-### Install & Run (not worked yet)
+### Install & Run
 
 This is the way Mongoku was installed:
 
