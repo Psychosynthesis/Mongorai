@@ -1,5 +1,5 @@
 import * as MongoDb from 'mongodb';
-import JsonEncoder from '../lib/JsonEncoder';
+import JsonEncoder from './JsonEncoder';
 
 export interface CollectionJSON {
   name: string;
@@ -49,13 +49,13 @@ export class Collection {
 
   async updateOne(document: string, newObj: any, partial: boolean) {
     const newValue = JsonEncoder.decode(newObj);
-    
+
     // TODO: For now it makes it impossible to remove fields from object with a projection
     const update = partial ? { '$set':newValue } : JsonEncoder.decode(newValue);
     await this._collection.replaceOne({
       _id: new MongoDb.ObjectId(document)
     }, update);
-    
+
     return JsonEncoder.encode(newValue);
   }
 
@@ -65,13 +65,25 @@ export class Collection {
     });
   }
 
-  count(query) {
-    if (query && Object.keys(query).length > 0) {
-      return this._collection.countDocuments(JsonEncoder.decode(query), {
-        maxTimeMS: this.countTimeout
-      }).catch(_ => this._collection.estimatedDocumentCount());
+  async count(query: any) {
+    if (query) {
+      let decoded;
+      try {
+        decoded = JsonEncoder.decode(query);
+      } catch (e) {
+        throw e;
+      }
+      if (
+        decoded &&
+        typeof decoded === 'object' &&
+        !Array.isArray(decoded) &&
+        Object.keys(decoded).length > 0
+      ) {
+        return this._collection.countDocuments(decoded, {
+          maxTimeMS: this.countTimeout
+        }).catch(_ => this._collection.estimatedDocumentCount());
+      }
     }
-    // fast count
     return this._collection.estimatedDocumentCount();
   }
 

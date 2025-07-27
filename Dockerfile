@@ -16,7 +16,7 @@ COPY ./ /mongorai
 
 RUN npm install -g typescript@5.8.2 \
       && npm ci \
-      && cd app \
+      && cd front \
       && npm ci \
       && npm run build \
       && cd .. \

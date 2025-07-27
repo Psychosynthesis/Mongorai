@@ -34,5 +34,5 @@ class Factory {
   }
 }
 
-const factory = new Factory();
-export default factory;
+export const Init = new Factory();
+export default Init;

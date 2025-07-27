@@ -5,15 +5,15 @@ import * as util from 'util';
 import Nedb from 'nedb';
 
 export interface Host {
-  path: string
+  path: string;
 }
 
 const DEFAULT_HOSTS = process.env.MONGORAI_DEFAULT_HOST ? process.env.MONGORAI_DEFAULT_HOST.split(';') : ['localhost:27017'];
 const DATABASE_FILE = process.env.MONGORAI_DATABASE_FILE || path.join(os.homedir(), '.mongorai.db');
 
-
 export class HostsManager {
-  private _db: Nedb;
+  // Инициализируем свойство null, это соответствует поведению Nedb (ошибка будет null при успешном выполнении)
+  private _db: Nedb | null = null;
 
   private promise(fn: any) {
     return util.promisify(fn.bind(this._db));
@@ -36,7 +36,7 @@ export class HostsManager {
 
     if (first) {
       await Promise.all(DEFAULT_HOSTS.map(async hostname => {
-        const insert: any = this.promise(this._db.insert);
+        const insert: any = this.promise(this._db!.insert);
         return await insert({
           path: hostname
         });
@@ -46,7 +46,14 @@ export class HostsManager {
 
   getHosts(): Promise<Host[]> {
     return new Promise<Host[]>((resolve, reject) => {
-      this._db.find({}, (err: Error, hosts: Host[]) => {
+      // Проверка инициализации
+      if (!this._db) {
+        reject(new Error('Database not initialized'));
+        return;
+      }
+
+      // Тип ошибки Error | null
+      this._db.find({}, (err: Error | null, hosts: Host[]) => {
         if (err) {
           return reject(err);
         }
@@ -59,13 +66,20 @@ export class HostsManager {
 
   async add(path: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
+      // Проверка инициализации
+      if (!this._db) {
+        reject(new Error('Database not initialized'));
+        return;
+      }
+
+      // Тип ошибки Error | null
       this._db.update({
         path: path
       }, {
         $set: {
           path: path
         }
-      }, { upsert: true }, (err: Error) => {
+      }, { upsert: true }, (err: Error | null) => {
         if (err) {
           return reject(err);
         } else {
@@ -77,9 +91,15 @@ export class HostsManager {
 
   async remove(path: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
+      // Проверка инициализации
+      if (!this._db) {
+        reject(new Error('Database not initialized'));
+        return;
+      }
+
       this._db.remove({
         path: new RegExp(`${path}`)
-      }, (err: Error) => {
+      }, (err: Error | null) => {
         if (err) {
           return reject(err);
         } else {
