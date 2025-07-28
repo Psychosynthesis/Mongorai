@@ -37,13 +37,13 @@ const errHandler: ErrorRequestHandler = (err: unknown, _: Request, res: Response
 const setupServer = () => {
   const SERVER_PORT = process.env.MONGORAI_SERVER_PORT || 3100;
   server.use(cors());
-  server.use('/api', basicAuth, api);
-  // Обслуживание статических файлов React
-  server.use(basicAuth, express.static('dist/front/'));
+  server.use(basicAuth);
+  server.use('/api', api);
+  server.use('/', express.static(path.resolve(__dirname, 'front/')));
 
   // Fallback для фронтенд-роутов
-  server.get('*', basicAuth, (_, res) => {
-    res.sendFile(path.resolve(__dirname, 'dist/front/index.html'));
+  server.get('/*splat', (_, res) => {
+    res.sendFile(path.resolve(__dirname, 'front/index.html'));
   });
   server.use(errHandler);
 
