@@ -5,7 +5,7 @@ import * as figlet from 'figlet';
 import * as child_process from 'child_process';
 import * as path from 'path';
 
-import * as server from './server';
+import * as server from './server.js';
 
 const cyanColor = '\x1b[36m'; // Colors for CLI
 const magentaColor = '\x1b[35m';
