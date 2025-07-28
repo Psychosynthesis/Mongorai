@@ -8,16 +8,18 @@ import * as path from 'path';
 import * as server from './server';
 
 const cyanColor = '\x1b[36m'; // Colors for CLI
+const magentaColor = '\x1b[35m';
 const resetColor = '\x1b[0m';
 const program = createCommand();
 
 program
   .version(require('../package.json').version) // Cause we run in the "dist" folder
-  .usage('start [--pm2] [--forever] [--no-auth]') // Список поддерживаемых опций
+  .usage('start [--pm2] [--forever] [--auth] [--pass]') // Список поддерживаемых опций
   .description('Mongorai - MongoDB client for the web')
   .option('--pm2', 'Run using pm2')
   .option('--forever', 'Run using forever')
-  .option('--no-auth', 'Disable basic authentication')
+  .option('--auth', 'Enable basic authentication')
+  .option('--pass <password>', 'Set password for basic auth')
   .action(start)
   .parse(process.argv);
 
@@ -28,15 +30,20 @@ async function start(cmd: 'start', options: any) {
 
   console.log(cyanColor + (figlet.textSync('Mongorai')) + '\n');
 
-  if (options.noAuth) {
-    process.env.MONGORAI_NO_AUTH = 'true';
-    console.log(`${cyanColor}[Auth]${resetColor} Basic authentication disabled`);
-  }
-
   const pm2 = options.pm2;
   const forever = options.forever;
   const entryPath = path.join(__dirname, 'server.js');
-  const authVar = options.noAuth ? 'MONGORAI_NO_AUTH=true ' : '';
+  let authVar = options.auth ? 'MONGORAI_ENABLE_AUTH=true ' : '';
+
+  if (authVar || process.env.MONGORAI_ENABLE_AUTH) {
+    process.env.MONGORAI_ENABLE_AUTH = 'true';
+    console.log(`${cyanColor}[Auth]${resetColor} Basic authentication enabled`);
+    if (!options.pass && !process.env.MONGORAI_PASS) {
+      console.log(`${magentaColor}[Auth]${resetColor} Auth is enabled but MONGORAI_PASS env variable didn't set! Mongorai will use default (check it in dock's) `);
+    } else if (options.pass) {
+      authVar += `MONGORAI_PASS=${options.pass} `;
+    }
+  }
 
   if (pm2 && forever) {
     console.log("Cannot launch with both PM2 and Forever. You need to chose one.");

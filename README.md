@@ -57,20 +57,20 @@ mongorai start --forever
 ```
 
 ## Options
-Run `mongorai` with the environment variable MONGORAI_NO_AUTH to disable Basic Auth:
+Run `mongorai` with the environment variable MONGORAI_ENABLE_AUTH=true to enable Basic Auth, or just use `--auth` option:
 ```bash
-mongorai start --no-auth
+mongorai start --auth
 ```
 
 **If you use basic authentication, don't forget to change the password by setting the variable MONGORAI_PASS:**
 ```bash
-MONGORAI_PASS="your_strong_pass" mongorai start
+mongorai start --auth --pass='your_strong_pass'
 ```
 
 Default credentials is:
 ```bash
 Username = mongorai
-Pass = default-front-pass
+Pass = default-pass
 ```
 
 ### Manual Build

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-const MONGORAI_PASS = process.env.MONGORAI_PASS ?? 'default-front-pass';
+const SETTED_PASS = process.env.MONGORAI_PASS ?? 'default-pass';
 
 // Расширяем интерфейс Error для добавления свойства status
 interface AuthError extends Error {
@@ -8,8 +8,8 @@ interface AuthError extends Error {
 }
 
 export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
-  const noAuth = process.env.MONGORAI_NO_AUTH === 'true';
-  if (noAuth) {
+  const authEnabled = process.env.MONGORAI_ENABLE_AUTH === 'true';
+  if (!authEnabled) {
     return next();
   }
 
@@ -37,7 +37,7 @@ export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
     }
 
     // Проверка учетных данных
-    if (user === 'mongorai' && pass === MONGORAI_PASS) {
+    if (user === 'mongorai' && pass === SETTED_PASS) {
       return next();
     }
 
