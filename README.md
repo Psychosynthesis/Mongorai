@@ -1,4 +1,5 @@
 # Mongorai
+[![npm version](https://img.shields.io/npm/v/mongorai)](https://www.npmjs.org/package/mongorai)
 
 Light MongoDB client for the web. Minimalistic UI used React with minimum dependencies.
 
@@ -62,23 +63,22 @@ Run `mongorai` with the environment variable MONGORAI_ENABLE_AUTH=true to enable
 mongorai start --auth
 ```
 
-**If you use basic authentication, don't forget to change the password by setting the variable MONGORAI_PASS:**
+**If you use basic authentication, don't forget to change the password by setting the variable MONGORAI_PASS, or use `--pass` option:**
 ```bash
 mongorai start --auth --pass='your_strong_pass'
 ```
 
-Default credentials is:
+Default auth credentials is:
 ```bash
 Username = mongorai
 Pass = default-pass
 ```
 
 ### Manual Build
-
-If you want to manually build and run Mongorai, just clone this repository and run the following:
+If you want to manually build and run Mongorai, just clone this repository (this is monorepo) and run the following:
 
 ```bash
-# Install the angular cli if you don't have it already
+# Install the dependencies for server
 npm install
 
 # Build the front
@@ -90,11 +90,10 @@ npm run build
 cd ..
 npm run build
 
-# Run
-node dist/server.js
-# or
+# Then run server
 npm run server
 ```
+If you want work with frontend, just run `npm run dev` in front folder in another console window without stopping server.
 
 ### Configuration
 You can also specify a few things using environment variables:
