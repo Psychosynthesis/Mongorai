@@ -14,8 +14,6 @@
 		"strictNullChecks": true,
 		"esModuleInterop": true
 	},
-	"include": [ "routes/**/*", "lib/**/*", "middlewares/**/*", "server.ts"],
-	"exclude": [
-		"front/**/*", "node_modules"
-	]
+	"include": [ "routes/**/*", "lib/**/*", "middlewares/**/*", "server.ts", "cli.ts"],
+	"exclude": [ "front/**/*", "node_modules" ]
 }
