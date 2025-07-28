@@ -38,8 +38,12 @@
 	z-index: 150;
 
 	.notification {
+		display: flex;
+		justify-content: center;
+
 		position: relative;
-		padding: 10px 30px;
+		padding: 10px;
+		padding-right: 30px;
 		margin-bottom: 10px;
 		word-wrap: break-word;
 		opacity: 0;
@@ -60,11 +64,15 @@
 		opacity: 1;
 	}
 
-	.close {
+	.popup-close {
+		background: transparent;
+		border: 1px solid var(--button-light);
+		border-radius: 5px;
 		color: var(--text-lighter);
 		text-shadow: none;
 		position: absolute;
-		top: 0;
+		top: 5px;
 		right: 5px;
+		padding: 4px;
 	}
 }

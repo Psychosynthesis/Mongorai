@@ -34,7 +34,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   const notify = useCallback((
     message: string,
     type: NotificationType = 'error',
-    timeout: number = 5000
+    timeout: number = 15000
   ) => {
     const id = Math.random().toString(36).substr(2, 9);
 
@@ -75,7 +75,7 @@ const NotificationsList = () => {
         >
           <div className="content">{notification.message}</div>
           <button
-            className="close"
+            className="popup-close"
             onClick={() => dismiss(notification.id)}
           >
             &times;

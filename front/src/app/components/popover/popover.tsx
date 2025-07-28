@@ -13,6 +13,7 @@ interface PopoverProps {
   data: PopoverData;
 }
 
+// Компонент для отображения всплывающего окошка со сводной информацией по таблицам
 export const Popover: React.FC<PopoverProps> = ({ left, top, data }) => {
   return (
     <div

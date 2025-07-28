@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 import { inspect } from 'node:util'; // Встроенный модуль для обработки циклических структур
 
 import { Init } from './lib/index.js';
@@ -20,7 +21,7 @@ const errHandler: ErrorRequestHandler = (err: unknown, _: Request, res: Response
     if (status === 500) {
       console.error('Unhandled error:', inspect(err, { depth: null, colors: true }));
     } else {  // Logging
-      console.warn('Error on serverside:', inspect(err, { depth: null, colors: true }));
+      console.warn(`Get ${status} error on serverside. ${message}`, inspect(err, { depth: 2, colors: true }));
     }
 
     // Стандартизированный ответ с учетом статуса
@@ -36,8 +37,14 @@ const errHandler: ErrorRequestHandler = (err: unknown, _: Request, res: Response
 const setupServer = () => {
   const SERVER_PORT = process.env.MONGORAI_SERVER_PORT || 3100;
   server.use(cors());
-  server.use('/', basicAuth, express.static('dist/front/'));
   server.use('/api', basicAuth, api);
+  // Обслуживание статических файлов React
+  server.use(basicAuth, express.static('dist/front/'));
+
+  // Fallback для фронтенд-роутов
+  server.get('*', basicAuth, (_, res) => {
+    res.sendFile(path.resolve(__dirname, 'dist/front/index.html'));
+  });
   server.use(errHandler);
 
   server.listen(SERVER_PORT, () => console.log(`${cyanColor}[Mongorai]${resetColor} listening on port ${SERVER_PORT}`));

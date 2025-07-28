@@ -3,7 +3,7 @@
 import { createCommand } from 'commander';
 import * as figlet from 'figlet';
 import * as child_process from 'child_process';
-import * as path from 'path';
+import path from 'path';
 
 import * as server from './server.js';
 
@@ -15,19 +15,20 @@ const program = createCommand();
 program
   .version(require('../package.json').version) // Cause we run in the "dist" folder
   .usage('start [--pm2] [--forever] [--auth] [--pass]') // Список поддерживаемых опций
-  .description('Mongorai - MongoDB client for the web')
+  .description('Mongorai - MongoDB client for the web');
+
+program.command('start') // Явно регистрируем команду 'start'
+  .description('Start the Mongorai server')
   .option('--pm2', 'Run using pm2')
   .option('--forever', 'Run using forever')
   .option('--auth', 'Enable basic authentication')
   .option('--pass <password>', 'Set password for basic auth')
-  .action(start)
-  .parse(process.argv);
+  .action(start); // Теперь action привязан только к команде 'start'
 
-async function start(cmd: 'start', options: any) {
-  if (cmd !== "start") {
-    return program.help();
-  }
+program.parse(process.argv);
 
+// Обновите сигнатуру функции start (уберите параметр cmd):
+async function start(options: any) {
   console.log(cyanColor + (figlet.textSync('Mongorai')) + '\n');
 
   const pm2 = options.pm2;

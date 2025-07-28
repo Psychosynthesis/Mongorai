@@ -67,23 +67,6 @@ const ExplorePage: React.FC = () => {
   const hasPrevious = params.skip > 0;
   const hasNext = params.skip + params.limit < displayCount.total;
 
-  useEffect(() => {
-    const checkReadOnly = async () => {
-      const isReadOnlyFlag = await isReadOnly();
-      setReadOnly(isReadOnlyFlag);
-    };
-
-    const loadData = async () => {
-      await checkReadOnly();
-      update();
-    };
-
-    loadData();
-  }, [server, database, collection]);
-
-  // Вспомогательные функции для пагинации
-
-
   const update = async (updateUrl = true) => {
     try {
       const parsedQuery = params.query ? JsonParser.parse(params.query, notify) : {};
@@ -141,31 +124,16 @@ const ExplorePage: React.FC = () => {
     }
   };
 
-  const next = () => {
-    const newSkip = params.skip + params.limit;
-    setParams(prev => ({ ...prev, skip: newSkip }));
+  const checkReadOnly = async () => {
+    const isReadOnlyFlag = await isReadOnly();
+    setReadOnly(isReadOnlyFlag);
+  };
+
+  const loadData = async () => {
+    await checkReadOnly();
     update();
-  };
+  }
 
-  const previous = () => {
-    const newSkip = Math.max(0, params.skip - params.limit);
-    setParams(prev => ({ ...prev, skip: newSkip }));
-    update();
-  };
-
-  const goToLast = () => {
-    const newSkip = Math.max(0, displayCount.total - params.limit);
-    setParams(prev => ({ ...prev, skip: newSkip }));
-    update();
-  };
-
-  const handleSearchChange = (newParams: Partial<typeof params>) => {
-    setParams(prev => ({ ...prev, ...newParams }));
-  };
-
-  const goToDocument = (documentId: string) => {
-    navigate(`/servers/${server}/databases/${database}/collections/${collection}/documents/${documentId}`);
-  };
 
   const handleEdit = async (id: string, newData: any) => {
     if (readOnly) return;
@@ -199,9 +167,30 @@ const ExplorePage: React.FC = () => {
     }
   };
 
+  const goToLast = () => {
+    const newSkip = Math.max(0, displayCount.total - params.limit);
+    setParams({ ...params, skip: newSkip });
+  };
+
+  const goToDocument = (documentId: string) => {
+    navigate(`/servers/${server}/databases/${database}/collections/${collection}/documents/${documentId}`);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [server, database, collection]);
+
+  useEffect(() => {
+    update();
+  }, [params.query, params.query, params.query, params.project, params.skip, params.limit]);
+
   return (
     <div className="explore-component">
-      <SearchBox params={params} onChange={handleSearchChange} onSearch={update} />
+      <SearchBox
+        params={params}
+        onChange={(newParams: Partial<typeof params>) => { setParams(prev => ({ ...prev, ...newParams })) }}
+        onSearch={update}
+      />
 
       <div className="pagination-controls">
         <div className="summary">
@@ -217,10 +206,10 @@ const ExplorePage: React.FC = () => {
         </div>
 
         <div className="actions">
-          <Button variant="outline-secondary" onClick={previous} disabled={!hasPrevious}>
+          <Button variant="outline-secondary" onClick={() => setParams({ ...params, skip: Math.max(0, params.skip - params.limit) })} disabled={!hasPrevious}>
             Previous
           </Button>
-          <Button variant="outline-secondary" onClick={next} disabled={!hasNext}>
+          <Button variant="outline-secondary" onClick={() => setParams({ ...params, skip: params.skip + params.limit })} disabled={!hasNext}>
             Next
           </Button>
           <Button  variant="outline-secondary"  onClick={goToLast} disabled={params.skip + params.limit >= displayCount.total || displayCount.total === 0}>
