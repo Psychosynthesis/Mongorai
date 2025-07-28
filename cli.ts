@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createCommand } from 'commander';
-import * as figlet from 'figlet';
+import figlet from 'figlet';
 import * as child_process from 'child_process';
 import path from 'path';
 
@@ -12,13 +12,11 @@ const magentaColor = '\x1b[35m';
 const resetColor = '\x1b[0m';
 const program = createCommand();
 
-program
-  .version(require('../package.json').version) // Cause we run in the "dist" folder
-  .usage('start [--pm2] [--forever] [--auth] [--pass]') // Список поддерживаемых опций
-  .description('Mongorai - MongoDB client for the web');
+program.version(require('../package.json').version) // Cause we run in the "dist" folder
 
 program.command('start') // Явно регистрируем команду 'start'
-  .description('Start the Mongorai server')
+  .usage('start [--pm2] [--forever] [--auth] [--pass]') // Список поддерживаемых опций
+  .description('Start the Mongorai - MongoDB client for the web')
   .option('--pm2', 'Run using pm2')
   .option('--forever', 'Run using forever')
   .option('--auth', 'Enable basic authentication')

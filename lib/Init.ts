@@ -1,9 +1,12 @@
 import { MongoManager } from './MongoManager';
 import { HostsManager } from './HostsManager';
 
+const cyanColor = '\x1b[36m'; // Colors for CLI
+const resetColor = '\x1b[0m';
+
 class Factory {
   private get _initializedError() {
-    return new Error("Factory.load() must be called first");
+    return new Error("HostsManager or MongoManager is not exist. Init.load() must be called first");
   }
 
   private _mongoManager: MongoManager;
@@ -24,6 +27,7 @@ class Factory {
   }
 
   async load() {
+    console.log(`${cyanColor}[Mongorai]${resetColor} Start init local DB managers`)
     // Start by initializing the host manager (needed for mongo manager)
     this._hostsManager = new HostsManager();
     await this._hostsManager.load();
@@ -31,6 +35,7 @@ class Factory {
     // Then we can initialize the mongo manager
     this._mongoManager = new MongoManager();
     await this._mongoManager.load();
+    console.log(`${cyanColor}[Mongorai]${resetColor} Local DB managers inited successfully`)
   }
 }
 

@@ -64,7 +64,7 @@ export class HostsManager {
     });
   }
 
-  async add(path: string): Promise<void> {
+  async add(path: string): Promise<void> { // TODO добавить проверку формата path
     return new Promise<void>((resolve, reject) => {
       // Проверка инициализации
       if (!this._db) {

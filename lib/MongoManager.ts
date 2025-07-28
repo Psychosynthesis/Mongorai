@@ -1,7 +1,7 @@
 import { URL } from 'url';
 import { MongoClient, MongoError } from 'mongodb';
 
-import { Init } from './Factory';
+import { Init } from './Init';
 import { Host } from './HostsManager';
 import { Server, ServerJSON, ServerErrorJSON } from './Server';
 import { DatabaseJSON } from './Database';

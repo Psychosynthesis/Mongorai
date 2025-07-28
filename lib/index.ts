@@ -1,6 +1,6 @@
 export * from './Collection';
 export * from './Database';
-export * from './Factory';
+export * from './Init';
 export * from './HostsManager';
 export * from './JsonEncoder';
 export * from './MongoManager';

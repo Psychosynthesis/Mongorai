@@ -21,7 +21,7 @@ const errHandler: ErrorRequestHandler = (err: unknown, _: Request, res: Response
     if (status === 500) {
       console.error('Unhandled error:', inspect(err, { depth: null, colors: true }));
     } else {  // Logging
-      console.warn(`Get ${status} error on serverside. ${message}`, inspect(err, { depth: 2, colors: true }));
+      console.warn(`Got a ${status} error on serverside. ${message}`, inspect(err, { depth: 2, colors: true }));
     }
 
     // Стандартизированный ответ с учетом статуса
