@@ -1,5 +1,6 @@
 # Mongorai
-[![npm version](https://img.shields.io/npm/v/mongorai)](https://www.npmjs.org/package/mongorai)
+[![npm version](https://img.shields.io/npm/v/mongorai)](https://www.npmjs.org/package/mongorai) &nbsp;
+[<img src="https://badgen.net/badge/♥/Donate/red?icon=heart" alt="Donation page">](https://github.com/Psychosynthesis/Donation)
 
 Light MongoDB client for the web. Minimalistic UI used React with minimum dependencies.
 
